@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.ConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.Config" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ckey" property="ckey" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="cvalue" property="cvalue" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.Config" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into config (ckey, note, cvalue
+      )
+    values (#{ckey,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{cvalue,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.Config" >
+    update config
+    set ckey = #{ckey,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      cvalue = #{cvalue,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, ckey, note, cvalue
+    from config
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, ckey, note, cvalue
+    from config
+  </select>
+</mapper>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.ResMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.Res" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="res_name" property="resName" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="review_num" property="reviewNum" jdbcType="INTEGER" />
+    <result column="review_avg_score" property="reviewAvgScore" jdbcType="DECIMAL" />
+    <result column="avg_price" property="avgPrice" jdbcType="DECIMAL" />
+    <result column="mobiles" property="mobiles" jdbcType="VARCHAR" />
+    <result column="addr" property="addr" jdbcType="VARCHAR" />
+    <result column="addr_node" property="addrNode" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="sub_district" property="subDistrict" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+    <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+    <result column="visible_flag" property="visibleFlag" jdbcType="INTEGER" />
+    <result column="click_num" property="clickNum" jdbcType="INTEGER" />
+    <result column="default_pic" property="defaultPic" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from res
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.Res" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into res (res_name, category_id, review_num, 
+      review_avg_score, avg_price, mobiles, 
+      addr, addr_node, district, 
+      sub_district, latitude, longitude, 
+      cre_time, del_flag, visible_flag, 
+      click_num)
+    values (#{resName,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER}, #{reviewNum,jdbcType=INTEGER}, 
+      #{reviewAvgScore,jdbcType=DECIMAL}, #{avgPrice,jdbcType=DECIMAL}, #{mobiles,jdbcType=VARCHAR}, 
+      #{addr,jdbcType=VARCHAR}, #{addrNode,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
+      #{subDistrict,jdbcType=VARCHAR}, #{latitude,jdbcType=DOUBLE}, #{longitude,jdbcType=DOUBLE}, 
+      #{creTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=INTEGER}, #{visibleFlag,jdbcType=INTEGER}, 
+      #{clickNum,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.Res" >
+    update res
+    set res_name = #{resName,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      review_num = #{reviewNum,jdbcType=INTEGER},
+      review_avg_score = #{reviewAvgScore,jdbcType=DECIMAL},
+      avg_price = #{avgPrice,jdbcType=DECIMAL},
+      mobiles = #{mobiles,jdbcType=VARCHAR},
+      addr = #{addr,jdbcType=VARCHAR},
+      addr_node = #{addrNode,jdbcType=VARCHAR},
+      district = #{district,jdbcType=VARCHAR},
+      sub_district = #{subDistrict,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      cre_time = #{creTime,jdbcType=TIMESTAMP},
+      del_flag = #{delFlag,jdbcType=INTEGER},
+      visible_flag = #{visibleFlag,jdbcType=INTEGER},
+      click_num = #{clickNum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateReviewNum"  >
+    update res
+    set
+    review_avg_score =(review_avg_score*review_num+#{score,jdbcType=DECIMAL})/(review_num + #{num,jdbcType=INTEGER}),
+    review_num =review_num + #{num,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select id, res_name, category_id, review_num, review_avg_score, avg_price, mobiles, 
+    addr, addr_node, district, sub_district, latitude, longitude, cre_time, del_flag, 
+    visible_flag, click_num,
+    (case when default_pic is null then '' else  concat("${prefix}",default_pic) end) default_pic
+    from res
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, res_name, category_id, review_num, review_avg_score, avg_price, mobiles, 
+    addr, addr_node, district, sub_district, latitude, longitude, cre_time, del_flag, 
+    visible_flag, click_num
+    from res
+  </select>
+  <select id="getHotTags" resultMap="BaseResultMap" >
+    select id, res_name
+    from res
+    where visible_flag=1 and del_flag=0
+    order by click_num Desc limit 10
+  </select>
+  <resultMap id="ListResultMap" type="com.yiyiglobal.dp.vo.res.ResForListVo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="res_name" property="resName" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+    <result column="review_num" property="reviewNum" jdbcType="INTEGER" />
+    <result column="review_avg_score" property="reviewAvgScore" jdbcType="DECIMAL" />
+    <result column="avg_price" property="avgPrice" jdbcType="DECIMAL" />
+    <result column="mobiles" property="mobiles" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="sub_district" property="subDistrict" jdbcType="VARCHAR" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+    <result column="click_num" property="clickNum" jdbcType="INTEGER" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="default_pic" property="defaultPic" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectResByPage"  resultMap="ListResultMap">
+    select r.id,
+    (case when r.branch_name is null then r.res_name else  concat(r.res_name,"(",r.branch_name,")") end) res_name,
+    r.category_id, r.review_num, r.review_avg_score, r.avg_price, r.mobiles,
+    r.district, r.sub_district, r.cre_time, r.click_num ,c.category_name,
+    (case when r.default_pic is null then '' else  concat("${prefix}",r.default_pic) end) default_pic
+    from res r
+    join category c on r.category_id = c.id
+    left join region rg on (rg.name is not null and r.district is not null and rg.name = r.district and rg.city_id = r.city_id)
+    where r.del_flag =0 and r.visible_flag =1 and r.res_name is not null
+    <if test="pageEntity.params.categoryId != null">
+      and r.category_id = #{pageEntity.params.categoryId}
+    </if>
+    <if test="pageEntity.params.firstCategoryId != null">
+      and c.pid = #{pageEntity.params.firstCategoryId}
+    </if>
+    <if test="pageEntity.params.resName != null and pageEntity.params.resName !=''">
+      and r.res_name like  '%${pageEntity.params.resName}%'
+    </if>
+    <if test="pageEntity.params.regionId != null">
+      and rg.id = #{pageEntity.params.regionId}
+    </if>
+    <if test="pageEntity.params.cityId != null">
+      and r.city_id = #{pageEntity.params.cityId}
+    </if>
+    <if test="pageEntity.params.areaId != null">
+      and rg.pid = #{pageEntity.params.areaId}
+    </if>
+    <if test="pageEntity.params.latitude != null and pageEntity.params.longitude != null">
+      and r.latitude is not null and r.longitude is not null and r.district is not null and
+      r.latitude &gt; #{pageEntity.params.latitude}-1 and
+      r.latitude &lt; #{pageEntity.params.latitude}+1 and
+      r.longitude &gt; #{pageEntity.params.longitude}-1 and
+      r.longitude &lt; #{pageEntity.params.longitude}+1
+    </if>
+    order by
+    <if test="pageEntity.params.latitude != null and pageEntity.params.longitude != null">
+      ACOS(SIN((#{pageEntity.params.latitude} * 3.1415) / 180 ) *SIN((r.latitude * 3.1415) / 180 )
+      +COS((#{pageEntity.params.latitude} * 3.1415) / 180 ) * COS((r.latitude * 3.1415) / 180 )
+      *COS((#{pageEntity.params.longitude}* 3.1415) / 180 - (r.longitude * 3.1415) / 180 ) ) * 6380 asc,
+    </if>
+    <if test="pageEntity.orderColumn != null and pageEntity.orderColumn == 'reviewScore'">
+      r.review_avg_score desc,
+    </if>
+    r.review_num desc
+    LIMIT #{pageEntity.offset},#{pageEntity.pageSize}
+  </select>
+  <select id="selectResNumByPage"  resultType="java.lang.Integer" >
+    select count(r.id)
+    from res r
+    join category c on r.category_id = c.id
+    left join region rg on (rg.name = r.district and rg.city_id = r.city_id)
+    where r.del_flag =0 and r.visible_flag =1 and r.res_name is not null
+    <if test="pageEntity.params.categoryId != null">
+      and r.category_id = #{pageEntity.params.categoryId}
+    </if>
+    <if test="pageEntity.params.firstCategoryId != null">
+      and c.pid = #{pageEntity.params.firstCategoryId}
+    </if>
+    <if test="pageEntity.params.resName != null and pageEntity.params.resName !=''">
+      and r.res_name like  '%${pageEntity.params.resName}%'
+    </if>
+    <if test="pageEntity.params.regionId != null">
+      and rg.id = #{pageEntity.params.regionId}
+    </if>
+    <if test="pageEntity.params.cityId != null">
+      and r.city_id = #{pageEntity.params.cityId}
+    </if>
+  </select>
+</mapper>

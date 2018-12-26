@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.CoinSuplyMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.CoinSuply" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="suply_date" property="suplyDate" jdbcType="DATE" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+    <result column="ten_contribution_value" property="tenContributionValue" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, num, suply_date, cre_time, ten_contribution_value
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from coin_suply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByDate" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from coin_suply
+    where DATE(suply_date)=#{date}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from coin_suply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.CoinSuply" >
+    insert into coin_suply (id, num, suply_date, 
+      cre_time, ten_contribution_value)
+    values (#{id,jdbcType=INTEGER}, #{num,jdbcType=INTEGER}, #{suplyDate,jdbcType=DATE}, 
+      #{creTime,jdbcType=TIMESTAMP}, #{tenContributionValue,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yiyiglobal.dp.domain.CoinSuply" >
+    insert into coin_suply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="suplyDate != null" >
+        suply_date,
+      </if>
+      <if test="creTime != null" >
+        cre_time,
+      </if>
+      <if test="tenContributionValue != null" >
+        ten_contribution_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="suplyDate != null" >
+        #{suplyDate,jdbcType=DATE},
+      </if>
+      <if test="creTime != null" >
+        #{creTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tenContributionValue != null" >
+        #{tenContributionValue,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yiyiglobal.dp.domain.CoinSuply" >
+    update coin_suply
+    <set >
+      <if test="num != null" >
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="suplyDate != null" >
+        suply_date = #{suplyDate,jdbcType=DATE},
+      </if>
+      <if test="creTime != null" >
+        cre_time = #{creTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tenContributionValue != null" >
+        ten_contribution_value = #{tenContributionValue,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.CoinSuply" >
+    update coin_suply
+    set num = #{num,jdbcType=INTEGER},
+      suply_date = #{suplyDate,jdbcType=DATE},
+      cre_time = #{creTime,jdbcType=TIMESTAMP},
+      ten_contribution_value = #{tenContributionValue,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

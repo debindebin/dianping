@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.MaterialMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.Material" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="material_url" property="materialUrl" jdbcType="VARCHAR" />
+    <result column="material_note" property="materialNote" jdbcType="VARCHAR" />
+    <result column="related_type" property="relatedType" jdbcType="INTEGER" />
+    <result column="related_id" property="relatedId" jdbcType="INTEGER" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+    <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+    <result column="material_type" property="materialType" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="INTEGER" />
+    <result column="persistent_id" property="persistentId" jdbcType="VARCHAR" />
+    <result column="duration" property="duration" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from material
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.Material" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into material (material_url, material_note, related_type, 
+      related_id, cre_time, del_flag, 
+      material_type, weight,persistent_id,duration)
+    values (#{materialUrl,jdbcType=VARCHAR}, #{materialNote,jdbcType=VARCHAR}, #{relatedType,jdbcType=INTEGER}, 
+      #{relatedId,jdbcType=INTEGER}, #{creTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=INTEGER}, 
+      #{materialType,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER}, #{persistentId,jdbcType=VARCHAR}, #{duration,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.Material" >
+    update material
+    set material_url = #{materialUrl,jdbcType=VARCHAR},
+      material_note = #{materialNote,jdbcType=VARCHAR},
+      related_type = #{relatedType,jdbcType=INTEGER},
+      related_id = #{relatedId,jdbcType=INTEGER},
+      cre_time = #{creTime,jdbcType=TIMESTAMP},
+      del_flag = #{delFlag,jdbcType=INTEGER},
+      material_type = #{materialType,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, material_url, material_note, related_type, related_id, cre_time, del_flag, 
+    material_type, weight
+    from material
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, material_url, material_note, related_type, related_id, cre_time, del_flag, 
+    material_type, weight
+    from material
+  </select>
+</mapper>

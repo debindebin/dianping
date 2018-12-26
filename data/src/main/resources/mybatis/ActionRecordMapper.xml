@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.ActionRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.ActionRecord" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="action_name" property="actionName" jdbcType="VARCHAR" />
+    <result column="params" property="params" jdbcType="VARCHAR" />
+    <result column="from" property="from" jdbcType="VARCHAR" />
+    <result column="related_id" property="relatedId" jdbcType="INTEGER" />
+    <result column="ip_addr" property="ipAddr" jdbcType="VARCHAR" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from action_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.ActionRecord" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into action_record (user_id, action_name, params, 
+      `from`, related_id, ip_addr, 
+      cre_time)
+    values (#{userId,jdbcType=INTEGER}, #{actionName,jdbcType=VARCHAR}, #{params,jdbcType=VARCHAR}, 
+      #{from,jdbcType=VARCHAR}, #{relatedId,jdbcType=INTEGER}, #{ipAddr,jdbcType=VARCHAR}, 
+      #{creTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.ActionRecord" >
+    update action_record
+    set user_id = #{userId,jdbcType=INTEGER},
+      action_name = #{actionName,jdbcType=VARCHAR},
+      params = #{params,jdbcType=VARCHAR},
+      `from` = #{from,jdbcType=VARCHAR},
+      related_id = #{relatedId,jdbcType=INTEGER},
+      ip_addr = #{ipAddr,jdbcType=VARCHAR},
+      cre_time = #{creTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, action_name, params, `from`, related_id, ip_addr, cre_time
+    from action_record
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, action_name, params, `from`, related_id, ip_addr, cre_time
+    from action_record
+  </select>
+</mapper>

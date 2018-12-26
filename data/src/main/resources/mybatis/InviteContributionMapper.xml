@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.InviteContributionMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.InviteContribution" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="from_user_id" property="fromUserId" jdbcType="INTEGER" />
+    <result column="to_user_id" property="toUserId" jdbcType="INTEGER" />
+    <result column="last_val" property="lastVal" jdbcType="INTEGER" />
+    <result column="sum_value" property="sumValue" jdbcType="INTEGER" />
+    <result column="contribute_date" property="contributeDate" jdbcType="DATE" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from invite_contribution
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.InviteContribution" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into invite_contribution (from_user_id, to_user_id, last_val, 
+      sum_value, contribute_date, cre_time
+      )
+    values (#{fromUserId,jdbcType=INTEGER}, #{toUserId,jdbcType=INTEGER}, #{lastVal,jdbcType=INTEGER}, 
+      #{sumValue,jdbcType=INTEGER}, #{contributeDate,jdbcType=DATE}, #{creTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.InviteContribution" >
+    update invite_contribution
+    set from_user_id = #{fromUserId,jdbcType=INTEGER},
+      to_user_id = #{toUserId,jdbcType=INTEGER},
+      last_val = #{lastVal,jdbcType=INTEGER},
+      sum_value = #{sumValue,jdbcType=INTEGER},
+      contribute_date = #{contributeDate,jdbcType=DATE},
+      cre_time = #{creTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, from_user_id, to_user_id, last_val, sum_value, contribute_date, cre_time
+    from invite_contribution
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectLastOne" resultMap="BaseResultMap" >
+    select id, from_user_id, to_user_id, last_val, sum_value, contribute_date, cre_time
+    from invite_contribution
+    where from_user_id = #{0} and to_user_id = #{1}
+    order by cre_time desc
+    limit 0,1
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, from_user_id, to_user_id, last_val, sum_value, contribute_date, cre_time
+    from invite_contribution
+  </select>
+</mapper>

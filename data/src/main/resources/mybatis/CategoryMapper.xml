@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.CategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.Category" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+    <result column="home_weight" property="homeWeight" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from category
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.Category" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into category (category_name, image_url, pid, 
+      weight, del_flag, home_weight
+      )
+    values (#{categoryName,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER}, 
+      #{weight,jdbcType=INTEGER}, #{delFlag,jdbcType=INTEGER}, #{homeWeight,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.Category" >
+    update category
+    set category_name = #{categoryName,jdbcType=VARCHAR},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=INTEGER},
+      del_flag = #{delFlag,jdbcType=INTEGER},
+      home_weight = #{homeWeight,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, category_name, image_url, pid, weight, del_flag, home_weight
+    from category
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getTopCategory" resultMap="BaseResultMap" >
+    select id, category_name, image_url, pid, weight, del_flag, home_weight
+    from category
+    where del_flag = 0 and pid=0
+    order by weight DESC
+  </select>
+  <select id="getSonCategory" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, category_name, image_url, pid, weight, del_flag, home_weight
+    from category
+    where del_flag = 0 and pid= #{id,jdbcType=INTEGER}
+    order by weight DESC
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, category_name, image_url, pid, weight, del_flag, home_weight
+    from category
+  </select>
+</mapper>

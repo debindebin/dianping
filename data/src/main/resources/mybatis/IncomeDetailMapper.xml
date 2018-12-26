@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.IncomeDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.IncomeDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="income_num" property="incomeNum" jdbcType="DECIMAL" />
+    <result column="income_type" property="incomeType" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="INTEGER" />
+    <result column="admin_note" property="adminNote" jdbcType="VARCHAR" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from income_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.IncomeDetail" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into income_detail (user_id, title, income_num, 
+      income_type, task_id, admin_note, 
+      cre_time)
+    values (#{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{incomeNum,jdbcType=DECIMAL}, 
+      #{incomeType,jdbcType=INTEGER}, #{taskId,jdbcType=INTEGER}, #{adminNote,jdbcType=VARCHAR}, 
+      #{creTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.IncomeDetail" >
+    update income_detail
+    set user_id = #{userId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      income_num = #{incomeNum,jdbcType=DECIMAL},
+      income_type = #{incomeType,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=INTEGER},
+      admin_note = #{adminNote,jdbcType=VARCHAR},
+      cre_time = #{creTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, title, income_num, income_type, task_id, admin_note, cre_time
+    from income_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, title, income_num, income_type, task_id, admin_note, cre_time
+    from income_detail
+  </select>
+
+  <select id="selectIncomeDetailList" resultMap="BaseResultMap" >
+    select id, user_id, title, income_num, income_type, task_id, admin_note, cre_time
+    from income_detail
+    where 1=1
+    <if test="params.userId != null">
+      and user_id = #{params.userId}
+    </if>
+    <if test="params.incomeType != null">
+      and income_type = #{params.incomeType}
+    </if>
+    <if test="params.taskId != null">
+      and task_id = #{params.taskId}
+    </if>
+    <if test="params.creTime != null">
+      and (TO_DAYS(#{params.creTime}) - TO_DAYS(cre_time)) = 0
+    </if>
+    order by cre_time desc
+    LIMIT #{offset},#{pageSize}
+  </select>
+  <select id="selectIncomeDetailNum" resultType="java.lang.Integer" >
+    select COUNT(id)
+    from income_detail
+    where 1=1
+    <if test="params.userId != null">
+      and user_id = #{params.userId}
+    </if>
+    <if test="params.incomeType != null">
+      and income_type = #{params.incomeType}
+    </if>
+    <if test="params.taskId != null">
+      and task_id = #{params.taskId}
+    </if>
+    <if test="params.creTime != null">
+      and (TO_DAYS(#{params.creTime}) - TO_DAYS(cre_time)) = 0
+    </if>
+  </select>
+
+  <select id="getHomeIncomeData" resultType="com.yiyiglobal.dp.dto.HomeIncomeDto" >
+    select
+    u.token_sum as tokenSum,
+    (case when sum(d.income_num) is null then 0 else  sum(d.income_num) end) as  yesterdayTokenSum,
+    (case when sum(d1.income_num) is null then 0 else  sum(d1.income_num) end) as  todayContributionSum,
+    u.token_remain as tokenRemain, 
+    (case when (select cs.ten_contribution_value from coin_suply cs where (TO_DAYS(NOW()) - TO_DAYS(cs.suply_date)) = 1) is null then 0
+    else  (select cs.ten_contribution_value from coin_suply cs where (TO_DAYS(NOW()) - TO_DAYS(cs.suply_date)) = 1) end)
+    as yesterdayRate
+    from  `user` u
+    left join income_detail d on (u.id = d.user_id and (TO_DAYS(NOW()) - TO_DAYS(d.cre_time)) = 1 and d.income_type =1)
+    left join income_detail d1 on (u.id = d1.user_id and (TO_DAYS(NOW()) - TO_DAYS(d1.cre_time)) = 0 and d1.income_type =2)
+    where u.id = #{0}
+  </select>
+
+  <select id="getContributionByDate"  resultType="com.yiyiglobal.dp.dto.wallet.ContributionDto">
+    select
+    d.user_id as userId,
+    (case when sum(d.income_num) is null then 0 else  sum(d.income_num) end) as  contributionSum,
+    u1.id  as pUserId
+    from  income_detail d
+    join `user` u on u.id = d.user_id
+    left join `user` u1 on (u.invite_code!=null and u1.self_invite_code!=null and u1.self_invite_code = u.invite_code)
+    WHERE DATE(d.cre_time)=#{date} and d.income_type =2
+    group by  d.user_id
+  </select>
+  <select id="getContributionSum" resultType="java.math.BigDecimal" >
+    select sum(income_num) from income_detail  WHERE DATE(cre_time)=#{date} and income_type =2
+  </select>
+
+</mapper>

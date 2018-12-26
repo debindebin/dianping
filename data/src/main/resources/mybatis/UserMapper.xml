@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="profile_image_url" property="profileImageUrl" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="country_mobile_code" property="countryMobileCode" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="birthday" property="birthday" jdbcType="DATE" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="qq_id" property="qqId" jdbcType="VARCHAR" />
+    <result column="weibo_id" property="weiboId" jdbcType="VARCHAR" />
+    <result column="wechat_union_id" property="wechatUnionId" jdbcType="VARCHAR" />
+    <result column="wechat_open_id" property="wechatOpenId" jdbcType="VARCHAR" />
+    <result column="wechat_mp_open_id" property="wechatMpOpenId" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="location_time" property="locationTime" jdbcType="TIMESTAMP" />
+    <result column="device_type" property="deviceType" jdbcType="INTEGER" />
+    <result column="device_client_id" property="deviceClientId" jdbcType="VARCHAR" />
+    <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="follow_num" property="followNum" jdbcType="INTEGER" />
+    <result column="following_num" property="followingNum" jdbcType="INTEGER" />
+    <result column="is_test_user" property="isTestUser" jdbcType="INTEGER" />
+    <result column="click_num" property="clickNum" jdbcType="INTEGER" />
+    <result column="is_allow_mutilogin" property="isAllowMutilogin" jdbcType="INTEGER" />
+    <result column="reg_device_id" property="regDeviceId" jdbcType="VARCHAR" />
+    <result column="activate_flag" property="activateFlag" jdbcType="INTEGER" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+    <result column="contribution_num" property="contributionNum" jdbcType="INTEGER" />
+    <result column="invite_code" property="inviteCode" jdbcType="VARCHAR" />
+    <result column="self_invite_code" property="selfInviteCode" jdbcType="VARCHAR" />
+    <result column="invite_num" property="inviteNum" jdbcType="INTEGER" />
+    <result column="token_remain" property="tokenRemain" jdbcType="DECIMAL" />
+    <result column="token_sum" property="tokenSum" jdbcType="DECIMAL" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.User" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user (id, nickname, profile_image_url, `password`,
+      salt, country_mobile_code, mobile, 
+      email, sex, birthday, 
+      description, qq_id, weibo_id, 
+      wechat_union_id, wechat_open_id, wechat_mp_open_id, 
+      country, province, city, 
+      latitude, longitude, location_time, 
+      device_type, device_client_id, login_time,
+      follow_num, following_num, is_test_user,
+      click_num, is_allow_mutilogin, reg_device_id,
+      activate_flag, cre_time, contribution_num,
+      invite_code, self_invite_code, invite_num,
+      token_remain, token_sum)
+    values (#{id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{profileImageUrl,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{salt,jdbcType=VARCHAR}, #{countryMobileCode,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, 
+      #{description,jdbcType=VARCHAR}, #{qqId,jdbcType=VARCHAR}, #{weiboId,jdbcType=VARCHAR}, 
+      #{wechatUnionId,jdbcType=VARCHAR}, #{wechatOpenId,jdbcType=VARCHAR}, #{wechatMpOpenId,jdbcType=VARCHAR}, 
+      #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=DOUBLE}, #{longitude,jdbcType=DOUBLE}, #{locationTime,jdbcType=TIMESTAMP}, 
+      #{deviceType,jdbcType=INTEGER}, #{deviceClientId,jdbcType=VARCHAR}, #{loginTime,jdbcType=TIMESTAMP},
+      #{followNum,jdbcType=INTEGER}, #{followingNum,jdbcType=INTEGER}, #{isTestUser,jdbcType=INTEGER},
+      #{clickNum,jdbcType=INTEGER}, #{isAllowMutilogin,jdbcType=INTEGER}, #{regDeviceId,jdbcType=VARCHAR},
+      #{activateFlag,jdbcType=INTEGER}, #{creTime,jdbcType=TIMESTAMP}, #{contributionNum,jdbcType=INTEGER},
+      #{inviteCode,jdbcType=VARCHAR}, #{selfInviteCode,jdbcType=VARCHAR}, #{inviteNum,jdbcType=INTEGER},
+      #{tokenRemain,jdbcType=DECIMAL}, #{tokenSum,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.User" >
+    update user
+    set nickname = #{nickname,jdbcType=VARCHAR},
+      profile_image_url = #{profileImageUrl,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      country_mobile_code = #{countryMobileCode,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      description = #{description,jdbcType=VARCHAR},
+      qq_id = #{qqId,jdbcType=VARCHAR},
+      weibo_id = #{weiboId,jdbcType=VARCHAR},
+      wechat_union_id = #{wechatUnionId,jdbcType=VARCHAR},
+      wechat_open_id = #{wechatOpenId,jdbcType=VARCHAR},
+      wechat_mp_open_id = #{wechatMpOpenId,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      location_time = #{locationTime,jdbcType=TIMESTAMP},
+      device_type = #{deviceType,jdbcType=INTEGER},
+      device_client_id = #{deviceClientId,jdbcType=VARCHAR},
+      login_time = #{loginTime,jdbcType=TIMESTAMP},
+      follow_num = #{followNum,jdbcType=INTEGER},
+      following_num = #{followingNum,jdbcType=INTEGER},
+      is_test_user = #{isTestUser,jdbcType=INTEGER},
+      click_num = #{clickNum,jdbcType=INTEGER},
+      is_allow_mutilogin = #{isAllowMutilogin,jdbcType=INTEGER},
+      reg_device_id = #{regDeviceId,jdbcType=VARCHAR},
+      activate_flag = #{activateFlag,jdbcType=INTEGER},
+      cre_time = #{creTime,jdbcType=TIMESTAMP},
+      contribution_num = #{contributionNum,jdbcType=INTEGER},
+      invite_code = #{inviteCode,jdbcType=VARCHAR},
+      self_invite_code = #{selfInviteCode,jdbcType=VARCHAR},
+      invite_num = #{inviteNum,jdbcType=INTEGER},
+      token_remain = #{tokenRemain,jdbcType=DECIMAL},
+      token_sum = #{tokenSum,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yiyiglobal.dp.domain.User" >
+    update user
+    <set >
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="profileImageUrl != null" >
+        profile_image_url = #{profileImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="countryMobileCode != null" >
+        country_mobile_code = #{countryMobileCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="qqId != null" >
+        qq_id = #{qqId,jdbcType=VARCHAR},
+      </if>
+      <if test="weiboId != null" >
+        weibo_id = #{weiboId,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatUnionId != null" >
+        wechat_union_id = #{wechatUnionId,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatOpenId != null" >
+        wechat_open_id = #{wechatOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatMpOpenId != null" >
+        wechat_mp_open_id = #{wechatMpOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="locationTime != null" >
+        location_time = #{locationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deviceType != null" >
+        device_type = #{deviceType,jdbcType=INTEGER},
+      </if>
+      <if test="deviceClientId != null" >
+        device_client_id = #{deviceClientId,jdbcType=VARCHAR},
+      </if>
+      <if test="loginTime != null" >
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="followNum != null" >
+        follow_num = #{followNum,jdbcType=INTEGER},
+      </if>
+      <if test="followingNum != null" >
+        following_num = #{followingNum,jdbcType=INTEGER},
+      </if>
+      <if test="isTestUser != null" >
+        is_test_user = #{isTestUser,jdbcType=INTEGER},
+      </if>
+      <if test="clickNum != null" >
+        click_num = #{clickNum,jdbcType=INTEGER},
+      </if>
+      <if test="isAllowMutilogin != null" >
+        is_allow_mutilogin = #{isAllowMutilogin,jdbcType=INTEGER},
+      </if>
+      <if test="regDeviceId != null" >
+        reg_device_id = #{regDeviceId,jdbcType=VARCHAR},
+      </if>
+      <if test="activateFlag != null" >
+        activate_flag = #{activateFlag,jdbcType=INTEGER},
+      </if>
+      <if test="creTime != null" >
+        cre_time = #{creTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contributionNum != null" >
+        contribution_num = #{contributionNum,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null" >
+        invite_code = #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="selfInviteCode != null" >
+        self_invite_code = #{selfInviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="inviteNum != null" >
+        invite_num = #{inviteNum,jdbcType=INTEGER},
+      </if>
+      <if test="tokenRemain != null" >
+        token_remain = #{tokenRemain,jdbcType=DECIMAL},
+      </if>
+      <if test="tokenSum != null" >
+        token_sum = #{tokenSum,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, nickname, profile_image_url, `password`, salt, country_mobile_code, mobile, 
+    email, sex, birthday, description, qq_id, weibo_id, wechat_union_id, wechat_open_id, 
+    wechat_mp_open_id, country, province, city, latitude, longitude, location_time, device_type, 
+    device_client_id, login_time, follow_num, following_num, is_test_user, click_num, 
+    is_allow_mutilogin, reg_device_id, activate_flag, cre_time, contribution_num, invite_code, 
+    self_invite_code, invite_num, token_remain, token_sum
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, nickname, profile_image_url, `password`, salt, country_mobile_code, mobile, 
+    email, sex, birthday, description, qq_id, weibo_id, wechat_union_id, wechat_open_id, 
+    wechat_mp_open_id, country, province, city, latitude, longitude, location_time, device_type, 
+    device_client_id, login_time, follow_num, following_num, is_test_user, click_num, 
+    is_allow_mutilogin, reg_device_id, activate_flag, cre_time, contribution_num, invite_code, 
+    self_invite_code, invite_num, token_remain, token_sum
+    from user
+  </select>
+
+
+  <select id="getUsersByInviteCode" resultType="com.yiyiglobal.dp.dto.user.InviteUserDto" >
+    SELECT u.id,u.nickname,
+    (select ic.sum_value from invite_contribution ic
+     where ic.to_user_id = u1.id and ic.from_user_id = u.id
+     order by ic.cre_time DESC limit 0,1) sumValue
+    FROM `user` u
+    join `user` u1 on (u.invite_code!=null and u1.self_invite_code!=null and u1.self_invite_code = u.invite_code)
+    WHERE u.invite_code = #{inviteCode}
+    order by sumValue desc
+  </select>
+
+  <select id="selectTokenRanks" resultMap="BaseResultMap" >
+    select id, nickname, profile_image_url, `password`, salt, country_mobile_code, mobile,
+    email, sex, birthday, description, qq_id, weibo_id, wechat_union_id, wechat_open_id,
+    wechat_mp_open_id, country, province, city, latitude, longitude, location_time, device_type,
+    device_client_id, login_time, follow_num, following_num, is_test_user, click_num,
+    is_allow_mutilogin, reg_device_id, activate_flag, cre_time, contribution_num, invite_code,
+    self_invite_code, invite_num, token_remain, token_sum
+    from user
+    where token_sum &gt; 0
+    order by token_sum DESC
+    LIMIT #{offset},#{pageSize}
+  </select>
+
+  <select id="selectTokenRankNum" resultType="java.lang.Integer" >
+    select count(id)
+    from user
+    where token_sum &gt; 0
+  </select>
+
+  <!-- 添加IOS延迟推送消息 -->
+  <insert id="addIOSDelyPush" parameterType="com.yiyiglobal.dp.util.push.IOSDelayPush">
+    insert into ios_delay_push(notificationId,deviceToken,content,`type`,redirectAddr,userId)
+    values(#{notificationId},#{deviceToken},#{content},#{type},#{redirectAddr},#{userId})
+  </insert>
+
+
+  <update id="addCoin" >
+    update user
+    <set>
+      <if test="contributionNum != null" >
+        contribution_num =contribution_num + #{contributionNum,jdbcType=INTEGER},
+      </if>
+      <if test="addCoinSum != null" >
+        token_remain =token_remain + #{addCoinSum,jdbcType=DECIMAL},
+        token_sum = token_sum + #{addCoinSum,jdbcType=DECIMAL}
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

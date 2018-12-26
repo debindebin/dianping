@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.ResReviewMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.ResReview" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="review_content" property="reviewContent" jdbcType="VARCHAR" />
+    <result column="consume_price" property="consumePrice" jdbcType="INTEGER" />
+    <result column="support_num" property="supportNum" jdbcType="INTEGER" />
+    <result column="unsupport_num" property="unsupportNum" jdbcType="INTEGER" />
+    <result column="review_num" property="reviewNum" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ReviewForListResultMap" type="com.yiyiglobal.dp.dto.review.ReviewForListDto" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="review_content" property="reviewContent" jdbcType="VARCHAR" />
+    <result column="consume_price" property="consumePrice" jdbcType="INTEGER" />
+    <result column="support_num" property="supportNum" jdbcType="INTEGER" />
+    <result column="unsupport_num" property="unsupportNum" jdbcType="INTEGER" />
+    <result column="review_num" property="reviewNum" jdbcType="INTEGER" />
+    <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="profile_image_url" property="profileImageUrl" jdbcType="VARCHAR" />
+    <result column="replyType" property="replyType" jdbcType="INTEGER" />
+    <result column="res_name" property="resName" jdbcType="VARCHAR" />
+    <result column="default_pic" property="defaultPic" jdbcType="VARCHAR" />
+    <collection property="pictureList" ofType="java.lang.String" >
+      <result column="pictureUrl" />
+    </collection>
+    <collection property="videoList" ofType="com.yiyiglobal.dp.domain.Material" >
+      <result column="videoUrl" property="materialUrl" jdbcType="VARCHAR" />
+      <result column="duration" property="duration" jdbcType="INTEGER" />
+    </collection>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from res_review
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.ResReview"  keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+    insert into res_review (user_id, res_id, score, 
+      review_content, consume_price, support_num, 
+      unsupport_num, review_num, del_flag, 
+      cre_time)
+    values (#{userId,jdbcType=INTEGER}, #{resId,jdbcType=INTEGER}, #{score,jdbcType=INTEGER}, 
+      #{reviewContent,jdbcType=VARCHAR}, #{consumePrice,jdbcType=INTEGER}, #{supportNum,jdbcType=INTEGER}, 
+      #{unsupportNum,jdbcType=INTEGER}, #{reviewNum,jdbcType=INTEGER}, #{delFlag,jdbcType=INTEGER}, 
+      #{creTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.ResReview" >
+    update res_review
+    set user_id = #{userId,jdbcType=INTEGER},
+      res_id = #{resId,jdbcType=INTEGER},
+      score = #{score,jdbcType=INTEGER},
+      review_content = #{reviewContent,jdbcType=VARCHAR},
+      consume_price = #{consumePrice,jdbcType=INTEGER},
+      support_num = #{supportNum,jdbcType=INTEGER},
+      unsupport_num = #{unsupportNum,jdbcType=INTEGER},
+      review_num = #{reviewNum,jdbcType=INTEGER},
+      del_flag = #{delFlag,jdbcType=INTEGER},
+      cre_time = #{creTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, res_id, score, review_content, consume_price, support_num, unsupport_num, 
+    review_num, del_flag, cre_time
+    from res_review
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, res_id, score, review_content, consume_price, support_num, unsupport_num, 
+    review_num, del_flag, cre_time
+    from res_review
+  </select>
+  <select id="selectResReviewByPage"  resultMap="ReviewForListResultMap">
+    select r.id, r.user_id, r.res_id, r.score, r.review_content, r.consume_price, r.support_num, r.unsupport_num,
+    r.review_num, r.del_flag, r.cre_time,
+    m.material_url as pictureUrl,
+    mv.material_url as videoUrl,
+    mv.duration as duration,
+    u.nickname,u.profile_image_url,
+    (select rr.`type` from review_reply rr
+     where rr.review_id=r.id and rr.`type` in (1,2) and rr.user_id =#{loginUserId} and rr.del_flag =0
+     order by id desc limit 0,1) replyType,
+    re.res_name,(case when re.default_pic is null then '' else  concat("${prefix}",re.default_pic) end) default_pic
+    from res_review r
+    join `user` u  on u.id = r.user_id
+    join  res  re  on r.res_id = re.id
+    left join material m on (m.related_id = r.id and m.related_type =2 and m.material_type =1)
+    left join material mv on (mv.related_id = r.id and mv.related_type =2 and mv.material_type =2)
+    where r.del_flag =0
+    <if test="pageEntity.params.userId != null">
+      and r.user_id = #{pageEntity.params.userId}
+    </if>
+    <if test="pageEntity.params.resId != null">
+      and  r.res_id = #{pageEntity.params.resId}
+    </if>
+    order by r.cre_time desc
+    LIMIT #{pageEntity.offset},#{pageEntity.pageSize}
+  </select>
+  <select id="selectResReviewNumByPage"  resultType="java.lang.Integer" >
+    select count(r.id)
+    from res_review r
+    join `user` u  on u.id = r.user_id
+    left join material m on (m.related_id = r.id and m.related_type =2 and m.material_type =1)
+    left join material mv on (mv.related_id = r.id and mv.related_type =2 and mv.material_type =2)
+    where r.del_flag =0
+    <if test="pageEntity.params.userId != null">
+      and r.user_id = #{pageEntity.params.userId}
+    </if>
+    <if test="pageEntity.params.resId != null">
+      and  r.res_id = #{pageEntity.params.resId}
+    </if>
+  </select>
+    <resultMap id="HotResResultMap" type="com.yiyiglobal.dp.dto.HotResDto" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="res_name" property="resName" jdbcType="VARCHAR" />
+        <result column="category_id" property="categoryId" jdbcType="INTEGER" />
+        <result column="review_num" property="reviewNum" jdbcType="INTEGER" />
+        <result column="review_avg_score" property="reviewAvgScore" jdbcType="DECIMAL" />
+        <result column="avg_price" property="avgPrice" jdbcType="DECIMAL" />
+        <result column="mobiles" property="mobiles" jdbcType="VARCHAR" />
+        <result column="addr" property="addr" jdbcType="VARCHAR" />
+        <result column="addr_node" property="addrNode" jdbcType="VARCHAR" />
+        <result column="district" property="district" jdbcType="VARCHAR" />
+        <result column="sub_district" property="subDistrict" jdbcType="VARCHAR" />
+        <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+        <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+        <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+        <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+        <result column="visible_flag" property="visibleFlag" jdbcType="INTEGER" />
+        <result column="click_num" property="clickNum" jdbcType="INTEGER" />
+        <result column="day_review_num" property="dayReviewNum" jdbcType="INTEGER" />
+        <result column="category_name" property="categoryName" jdbcType="INTEGER" />
+        <result column="default_pic" property="defaultPic" jdbcType="VARCHAR" />
+    </resultMap>
+
+  <select id="selectTopRes"    resultMap="HotResResultMap" >
+    select
+    r.id,
+    (case when r.branch_name is null then r.res_name else  concat(r.res_name,"(",r.branch_name,")") end) res_name,
+    r.category_id, r.review_num, r.review_avg_score, r.avg_price, r.mobiles,
+    r.addr, r.addr_node, r.district, r.sub_district, r.latitude, r.longitude, r.cre_time, r.click_num,count(v.id) as day_review_num,
+    c.category_name,
+    (case when r.default_pic is null then '' else  concat("${prefix}",r.default_pic) end) default_pic
+    from  res r
+    join res_review v on r.id = v.res_id
+    left join category c on c.id = r.category_id
+    left join region re on (re.name = r.district and re.city_id = r.city_id)
+    where r.del_flag =0 and r.visible_flag =1 and r.res_name is not null
+    <if test="cityId !=null and cityId != -1">
+      and r.city_id = #{cityId}
+    </if>
+    and v.cre_time &gt;=DATE_SUB(NOW(),INTERVAL #{day} DAY)
+    group by v.res_id
+    order by count(v.id)  desc
+    limit 0,20
+  </select>
+
+  <update id="addReviewNum"   parameterType="com.yiyiglobal.dp.domain.ResReview">
+    update res_review
+    <set>
+      <if test="supportNum !=null">
+        support_num = support_num+#{supportNum},
+      </if>
+      <if test="unsupportNum !=null">
+        unsupport_num = unsupport_num+#{unsupportNum},
+      </if>
+      <if test="reviewNum !=null">
+        review_num = review_num+ #{reviewNum}
+      </if>
+    </set>
+    <where>
+      <if test="id !=null">
+        id = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="id ==null">
+        1=0
+      </if>
+    </where>
+  </update>
+</mapper>

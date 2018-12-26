@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.WxCallbackMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.WxCallback" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="to_user_name" property="toUserName" jdbcType="VARCHAR" />
+    <result column="from_user_name" property="fromUserName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="INTEGER" />
+    <result column="msg_type" property="msgType" jdbcType="VARCHAR" />
+    <result column="event" property="event" jdbcType="VARCHAR" />
+    <result column="event_key" property="eventKey" jdbcType="VARCHAR" />
+    <result column="msg_id" property="msgId" jdbcType="VARCHAR" />
+    <result column="pic_url" property="picUrl" jdbcType="VARCHAR" />
+    <result column="media_id" property="mediaId" jdbcType="VARCHAR" />
+    <result column="format" property="format" jdbcType="VARCHAR" />
+    <result column="recognition" property="recognition" jdbcType="VARCHAR" />
+    <result column="thumb_media_id" property="thumbMediaId" jdbcType="VARCHAR" />
+    <result column="scale" property="scale" jdbcType="VARCHAR" />
+    <result column="label" property="label" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="ticket" property="ticket" jdbcType="VARCHAR" />
+    <result column="latitude" property="latitude" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="VARCHAR" />
+    <result column="precision" property="precision" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+    <result column="filter_count" property="filterCount" jdbcType="INTEGER" />
+    <result column="sent_count" property="sentCount" jdbcType="INTEGER" />
+    <result column="error_count" property="errorCount" jdbcType="INTEGER" />
+    <result column="expired_time" property="expiredTime" jdbcType="INTEGER" />
+    <result column="fail_time" property="failTime" jdbcType="INTEGER" />
+    <result column="fail_reason" property="failReason" jdbcType="VARCHAR" />
+    <result column="uniq_id" property="uniqId" jdbcType="VARCHAR" />
+    <result column="poi_id" property="poiId" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="msg" property="msg" jdbcType="VARCHAR" />
+    <result column="lottery_id" property="lotteryId" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="INTEGER" />
+    <result column="bind_time" property="bindTime" jdbcType="INTEGER" />
+    <result column="connect_time" property="connectTime" jdbcType="INTEGER" />
+    <result column="expire_time" property="expireTime" jdbcType="INTEGER" />
+    <result column="vendor_id" property="vendorId" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="device_no" property="deviceNo" jdbcType="VARCHAR" />
+    <result column="key_standard" property="keyStandard" jdbcType="VARCHAR" />
+    <result column="key_str" property="keyStr" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="INTEGER" />
+    <result column="scene" property="scene" jdbcType="INTEGER" />
+    <result column="region_code" property="regionCode" jdbcType="VARCHAR" />
+    <result column="reason_msg" property="reasonMsg" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wx_callback
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.WxCallback" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into wx_callback (to_user_name, from_user_name, create_time, 
+      msg_type, event, event_key, 
+      msg_id, pic_url, media_id, 
+      format, recognition, thumb_media_id, 
+      `scale`, `label`, title, 
+      description, url, ticket, 
+      latitude, longitude, `precision`, 
+      `status`, total_count, filter_count, 
+      sent_count, error_count, expired_time, 
+      fail_time, fail_reason, uniq_id, 
+      poi_id, `result`, msg, 
+      lottery_id, money, bind_time, 
+      connect_time, expire_time, vendor_id, 
+      shop_id, device_no, key_standard, 
+      key_str, country, province, 
+      city, sex, scene, region_code, 
+      reason_msg, content)
+    values (#{toUserName,jdbcType=VARCHAR}, #{fromUserName,jdbcType=VARCHAR}, #{createTime,jdbcType=INTEGER}, 
+      #{msgType,jdbcType=VARCHAR}, #{event,jdbcType=VARCHAR}, #{eventKey,jdbcType=VARCHAR}, 
+      #{msgId,jdbcType=VARCHAR}, #{picUrl,jdbcType=VARCHAR}, #{mediaId,jdbcType=VARCHAR}, 
+      #{format,jdbcType=VARCHAR}, #{recognition,jdbcType=VARCHAR}, #{thumbMediaId,jdbcType=VARCHAR}, 
+      #{scale,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{ticket,jdbcType=VARCHAR}, 
+      #{latitude,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, #{precision,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{totalCount,jdbcType=INTEGER}, #{filterCount,jdbcType=INTEGER}, 
+      #{sentCount,jdbcType=INTEGER}, #{errorCount,jdbcType=INTEGER}, #{expiredTime,jdbcType=INTEGER}, 
+      #{failTime,jdbcType=INTEGER}, #{failReason,jdbcType=VARCHAR}, #{uniqId,jdbcType=VARCHAR}, 
+      #{poiId,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, 
+      #{lotteryId,jdbcType=VARCHAR}, #{money,jdbcType=INTEGER}, #{bindTime,jdbcType=INTEGER}, 
+      #{connectTime,jdbcType=INTEGER}, #{expireTime,jdbcType=INTEGER}, #{vendorId,jdbcType=VARCHAR}, 
+      #{shopId,jdbcType=VARCHAR}, #{deviceNo,jdbcType=VARCHAR}, #{keyStandard,jdbcType=VARCHAR}, 
+      #{keyStr,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, #{scene,jdbcType=INTEGER}, #{regionCode,jdbcType=VARCHAR}, 
+      #{reasonMsg,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.WxCallback" >
+    update wx_callback
+    set to_user_name = #{toUserName,jdbcType=VARCHAR},
+      from_user_name = #{fromUserName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=INTEGER},
+      msg_type = #{msgType,jdbcType=VARCHAR},
+      event = #{event,jdbcType=VARCHAR},
+      event_key = #{eventKey,jdbcType=VARCHAR},
+      msg_id = #{msgId,jdbcType=VARCHAR},
+      pic_url = #{picUrl,jdbcType=VARCHAR},
+      media_id = #{mediaId,jdbcType=VARCHAR},
+      format = #{format,jdbcType=VARCHAR},
+      recognition = #{recognition,jdbcType=VARCHAR},
+      thumb_media_id = #{thumbMediaId,jdbcType=VARCHAR},
+      `scale` = #{scale,jdbcType=VARCHAR},
+      `label` = #{label,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      ticket = #{ticket,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      `precision` = #{precision,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      total_count = #{totalCount,jdbcType=INTEGER},
+      filter_count = #{filterCount,jdbcType=INTEGER},
+      sent_count = #{sentCount,jdbcType=INTEGER},
+      error_count = #{errorCount,jdbcType=INTEGER},
+      expired_time = #{expiredTime,jdbcType=INTEGER},
+      fail_time = #{failTime,jdbcType=INTEGER},
+      fail_reason = #{failReason,jdbcType=VARCHAR},
+      uniq_id = #{uniqId,jdbcType=VARCHAR},
+      poi_id = #{poiId,jdbcType=VARCHAR},
+      `result` = #{result,jdbcType=VARCHAR},
+      msg = #{msg,jdbcType=VARCHAR},
+      lottery_id = #{lotteryId,jdbcType=VARCHAR},
+      money = #{money,jdbcType=INTEGER},
+      bind_time = #{bindTime,jdbcType=INTEGER},
+      connect_time = #{connectTime,jdbcType=INTEGER},
+      expire_time = #{expireTime,jdbcType=INTEGER},
+      vendor_id = #{vendorId,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=VARCHAR},
+      device_no = #{deviceNo,jdbcType=VARCHAR},
+      key_standard = #{keyStandard,jdbcType=VARCHAR},
+      key_str = #{keyStr,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      scene = #{scene,jdbcType=INTEGER},
+      region_code = #{regionCode,jdbcType=VARCHAR},
+      reason_msg = #{reasonMsg,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, to_user_name, from_user_name, create_time, msg_type, event, event_key, 
+    msg_id, pic_url, media_id, format, recognition, thumb_media_id, `scale`, `label`, 
+    title, description, url, ticket, latitude, longitude, `precision`, `status`, total_count, 
+    filter_count, sent_count, error_count, expired_time, fail_time, fail_reason, uniq_id, 
+    poi_id, `result`, msg, lottery_id, money, bind_time, connect_time, expire_time, vendor_id, 
+    shop_id, device_no, key_standard, key_str, country, province, city, sex, scene, region_code, 
+    reason_msg, content
+    from wx_callback
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, to_user_name, from_user_name, create_time, msg_type, event, event_key, 
+    msg_id, pic_url, media_id, format, recognition, thumb_media_id, `scale`, `label`, 
+    title, description, url, ticket, latitude, longitude, `precision`, `status`, total_count, 
+    filter_count, sent_count, error_count, expired_time, fail_time, fail_reason, uniq_id, 
+    poi_id, `result`, msg, lottery_id, money, bind_time, connect_time, expire_time, vendor_id, 
+    shop_id, device_no, key_standard, key_str, country, province, city, sex, scene, region_code, 
+    reason_msg, content
+    from wx_callback
+  </select>
+</mapper>

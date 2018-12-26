@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yiyiglobal.dp.mapper.NotificationMapper" >
+  <resultMap id="BaseResultMap" type="com.yiyiglobal.dp.domain.Notification" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="redirect_type" property="redirectType" jdbcType="INTEGER" />
+    <result column="redirect_addr" property="redirectAddr" jdbcType="VARCHAR" />
+    <result column="del_flag" property="delFlag" jdbcType="INTEGER" />
+    <result column="cre_time" property="creTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="readed" property="readed" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from notification
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiyiglobal.dp.domain.Notification" useGeneratedKeys="true" keyProperty="id">
+    insert into notification (user_id, title, content, 
+      redirect_type, redirect_addr, del_flag, 
+      cre_time, `type`)
+    values (#{userId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{redirectType,jdbcType=INTEGER}, #{redirectAddr,jdbcType=VARCHAR}, #{delFlag,jdbcType=INTEGER}, 
+      #{creTime,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiyiglobal.dp.domain.Notification" >
+    update notification
+    set user_id = #{userId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      redirect_type = #{redirectType,jdbcType=INTEGER},
+      redirect_addr = #{redirectAddr,jdbcType=VARCHAR},
+      del_flag = #{delFlag,jdbcType=INTEGER},
+      cre_time = #{creTime,jdbcType=TIMESTAMP},
+      `type` = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, title, content, redirect_type, redirect_addr, del_flag, cre_time, 
+    `type`
+    from notification
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, title, content, redirect_type, redirect_addr, del_flag, cre_time, 
+    `type`
+    from notification
+  </select>
+  <select id="getSystemNotification" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select id, user_id, title, content, redirect_type, redirect_addr, cre_time,
+    `type`
+    from notification
+    where user_id = #{id,jdbcType=INTEGER} and del_flag=0 AND type=1
+    order by cre_time DESC
+  </select>
+
+  <select id="getPersonalNotification" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+    select id, user_id, title, content, redirect_type, redirect_addr, cre_time,
+    `type`
+    from notification
+    where user_id = #{id,jdbcType=INTEGER} and del_flag=0 and type=2
+    order by cre_time DESC
+  </select>
+
+  <select id="selectNotificationByPage"  resultMap="BaseResultMap">
+    select id, user_id, title, content, redirect_type, redirect_addr, cre_time,
+    `type`,readed
+    from notification
+    <where>
+        <if test="params != null">
+          user_id = #{params}
+        </if>
+    </where>
+    order by readed,cre_time desc
+    LIMIT #{offset},#{pageSize}
+  </select>
+  <select id="selectNotificationNumByPage"  resultType="java.lang.Integer" >
+    select count(id)
+    from notification
+    <where>
+      <if test="params != null">
+        user_id = #{params}
+      </if>
+    </where>
+  </select>
+
+  <!-- 将用户未读物的通知置为已读 -->
+  <update id="updateUserReadStatus" parameterType="java.lang.Integer">
+    update notification SET readed=1
+    WHERE user_id=#{0}
+  </update>
+
+  <!-- 获取用户未读的总记录数 -->
+  <select id="getUnReadNotificationNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*) from notification n
+    where n.user_id=#{0} and n.readed=0
+  </select>
+</mapper>
